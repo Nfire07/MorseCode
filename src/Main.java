@@ -31,63 +31,63 @@ public class Main {
 	public static void menuScreen(JFrame window, WindowGraphics windowGraphics) {
 		windowGraphics.removeAll();
 		window.repaint();
-        window.revalidate();
-        JLabel title = new JLabel(titleString);
-        title.setFont(new Font("Arial",Font.BOLD,50));
-        FontMetrics fontMetrics = title.getFontMetrics(title.getFont());
+	        window.revalidate();
+        	JLabel title = new JLabel(titleString);
+        	title.setFont(new Font("Arial",Font.BOLD,50));
+        	FontMetrics fontMetrics = title.getFontMetrics(title.getFont());
         
-        title.setBounds(window.getWidth()/2-fontMetrics.stringWidth(titleString)/2,
+	        title.setBounds(window.getWidth()/2-fontMetrics.stringWidth(titleString)/2,
         				150,
         				fontMetrics.stringWidth(titleString),
         				fontMetrics.getHeight());
         
-        title.setForeground(Color.decode("#e6e1e1"));
+        	title.setForeground(Color.decode("#e6e1e1"));
         
-        title.setFocusable(false);
-        title.setBorder(BorderFactory.createEmptyBorder());
-        windowGraphics.add(title);
-        
-        
-        
-        JButton[] menuButtons = new JButton[4];
+        	title.setFocusable(false);
+        	title.setBorder(BorderFactory.createEmptyBorder());
+        	windowGraphics.add(title);
         
         
-        int padding=0;
-        for (int i = 0; i < menuButtons.length; i++) {
-        	menuButtons[i]=new JButton();
-        	menuButtons[i].setBounds(window.getWidth()/2-100,250+padding,200,50);
-        	menuButtons[i].setForeground(foreground);
-        	menuButtons[i].setFont(new Font("Arial",Font.BOLD,18));
-        	menuButtons[i].setFocusable(false);
-        	menuButtons[i].setBorder(BorderFactory.createEmptyBorder());
-        	
-        	padding+=100;
-        	windowGraphics.add(menuButtons[i]);			
+        
+        	JButton[] menuButtons = new JButton[4];
+        
+        
+        	int padding=0;
+        	for (int i = 0; i < menuButtons.length; i++) {
+        		menuButtons[i]=new JButton();
+        		menuButtons[i].setBounds(window.getWidth()/2-100,250+padding,200,50);
+        		menuButtons[i].setForeground(foreground);
+        		menuButtons[i].setFont(new Font("Arial",Font.BOLD,18));
+        		menuButtons[i].setFocusable(false);
+        		menuButtons[i].setBorder(BorderFactory.createEmptyBorder());
+	        	
+        		padding+=100;
+        		windowGraphics.add(menuButtons[i]);			
 		}
-
+	
+	        
+	        menuButtons[0].setText("Decode Mode");
+	        menuButtons[0].setBackground(affermativeBackground);
+	        
+	        menuButtons[1].setText("Encode Mode");
+	        menuButtons[1].setBackground(affermativeBackground);
+	        menuButtons[1].addActionListener(e -> {
+	        	encodeModeScreen(window, windowGraphics);
+	        }); 
+	        
+	        menuButtons[2].setText("About");
+	        menuButtons[2].setBackground(aboutBackground);
+	        menuButtons[2].addActionListener(e -> {
+	        	aboutScreen(window, windowGraphics);
+	        }); 
         
-        menuButtons[0].setText("Decode Mode");
-        menuButtons[0].setBackground(affermativeBackground);
-        
-        menuButtons[1].setText("Encode Mode");
-        menuButtons[1].setBackground(affermativeBackground);
-        menuButtons[1].addActionListener(e -> {
-        	encodeModeScreen(window, windowGraphics);
-        }); 
-        
-        menuButtons[2].setText("About");
-        menuButtons[2].setBackground(aboutBackground);
-        menuButtons[2].addActionListener(e -> {
-        	aboutScreen(window, windowGraphics);
-        }); 
         
         
-        
-        menuButtons[3].setText("Exit");
-        menuButtons[3].setBackground(negativeBackground);
-        menuButtons[3].addActionListener(e -> {window.dispose();System.exit(0);}); // makes the program exit when you click button exit
-
-        window.add(windowGraphics);
+	        menuButtons[3].setText("Exit");
+	        menuButtons[3].setBackground(negativeBackground);
+	        menuButtons[3].addActionListener(e -> {window.dispose();System.exit(0);}); // makes the program exit when you click button exit
+	
+	        window.add(windowGraphics);
 	}
 	
 	public static void aboutScreen(JFrame window, WindowGraphics windowGraphics) {
@@ -260,11 +260,7 @@ public class Main {
         
         menuScreen(window,windowGraphics);
         
-        
         window.setVisible(true);
-        
-        
-        
                 
     }
 }
