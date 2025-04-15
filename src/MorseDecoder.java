@@ -4,11 +4,9 @@ import java.util.Map;
 import java.util.Random;
 
 public class MorseDecoder {
-    private final Map<String, String> alphaToMorse;
-    private final Map<String, String> morseToAlpha;
+    private final static Map<String, String> alphaToMorse=new HashMap<>();
 
     public MorseDecoder() {
-    	 alphaToMorse = new HashMap<>();
          alphaToMorse.put("A", ".-");
          alphaToMorse.put("B", "-...");
          alphaToMorse.put("C", "-.-.");
@@ -47,46 +45,17 @@ public class MorseDecoder {
          alphaToMorse.put("9", "----.");
          alphaToMorse.put(" ", " ");
 
-         morseToAlpha = new HashMap<>();
-         morseToAlpha.put(".-", "A");
-         morseToAlpha.put("-...", "B");
-         morseToAlpha.put("-.-.", "C");
-         morseToAlpha.put("-..", "D");
-         morseToAlpha.put(".", "E");
-         morseToAlpha.put("..-.", "F");
-         morseToAlpha.put("--.", "G");
-         morseToAlpha.put("....", "H");
-         morseToAlpha.put("..", "I");
-         morseToAlpha.put(".---", "J");
-         morseToAlpha.put("-.-", "K");
-         morseToAlpha.put(".-..", "L");
-         morseToAlpha.put("--", "M");
-         morseToAlpha.put("-.", "N");
-         morseToAlpha.put("---", "O");
-         morseToAlpha.put(".--.", "P");
-         morseToAlpha.put("--.-", "Q");
-         morseToAlpha.put(".-.", "R");
-         morseToAlpha.put("...", "S");
-         morseToAlpha.put("-", "T");
-         morseToAlpha.put("..-", "U");
-         morseToAlpha.put("...-", "V");
-         morseToAlpha.put(".--", "W");
-         morseToAlpha.put("-..-", "X");
-         morseToAlpha.put("-.--", "Y");
-         morseToAlpha.put("--..", "Z");
-         morseToAlpha.put("-----", "0");
-         morseToAlpha.put(".----", "1");
-         morseToAlpha.put("..---", "2");
-         morseToAlpha.put("...--", "3");
-         morseToAlpha.put("....-", "4");
-         morseToAlpha.put(".....", "5");
-         morseToAlpha.put("-....", "6");
-         morseToAlpha.put("--...", "7");
-         morseToAlpha.put("---..", "8");
-         morseToAlpha.put("----.", "9");
-         morseToAlpha.put(" ", " ");
     }
 
+    public static String morseToAlpha(String V) {
+		for(Map.Entry<String, String> entry : alphaToMorse.entrySet()) {
+			if(entry.getValue().equals(V)){
+				return entry.getKey();
+			}
+		}
+		return null;
+    }
+    
     public String decodeMorse(String morse) {
         String[] morseWords = morse.split("  "); 
         StringBuilder decodedMessage = new StringBuilder();
@@ -94,7 +63,7 @@ public class MorseDecoder {
         for (String morseWord : morseWords) {
             String[] morseCharacters = morseWord.split(" "); 
             for (String morseCharacter : morseCharacters) {
-                decodedMessage.append(morseToAlpha.get(morseCharacter));
+                decodedMessage.append(morseToAlpha(morseCharacter));
             }
             decodedMessage.append(" ");  
         }
@@ -133,6 +102,10 @@ public class MorseDecoder {
     
     public String getRandomKey() {
     	return new ArrayList<String>(alphaToMorse.keySet()).get(new Random().nextInt(alphaToMorse.size())); 
+    }
+    
+    public String getRandomValue() {
+    	return new ArrayList<String>(alphaToMorse.values()).get(new Random().nextInt(alphaToMorse.size())); 
     }
 
     

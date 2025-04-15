@@ -1,15 +1,7 @@
-import javax.print.attribute.AttributeSet;
 import javax.swing.*;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
-
+import javax.swing.table.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 
 public class Main {
 	/*
@@ -20,11 +12,11 @@ public class Main {
 	 */	
 	public static final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final String titleString = "Morse Trainer 1.0";
-	public static final Color foreground = Color.decode("#e6e1e1");
+	public static final Color foreground = Color.decode("#e6e1e1").brighter();
 	public static final Color affermativeBackground = Color.decode("#235c32");
 	public static final Color aboutBackground = Color.decode("#5c5323");
 	public static final Color negativeBackground = Color.decode("#691f1f");
-	public static final Color background = Color.decode("#212020");
+	public static final Color background = Color.decode("#212020").brighter();
 	
 	
 	
@@ -32,6 +24,7 @@ public class Main {
 		windowGraphics.removeAll();
 		window.repaint();
         window.revalidate();
+        
         JLabel title = new JLabel(titleString);
         title.setFont(new Font("Arial",Font.BOLD,50));
         FontMetrics fontMetrics = title.getFontMetrics(title.getFont());
@@ -41,7 +34,7 @@ public class Main {
         				fontMetrics.stringWidth(titleString),
         				fontMetrics.getHeight());
         
-        title.setForeground(Color.decode("#e6e1e1"));
+        title.setForeground(foreground);
         
         title.setFocusable(false);
         title.setBorder(BorderFactory.createEmptyBorder());
@@ -68,6 +61,9 @@ public class Main {
         
         menuButtons[0].setText("Decode Mode");
         menuButtons[0].setBackground(affermativeBackground);
+        menuButtons[0].addActionListener(e -> {
+        	
+        });
         
         menuButtons[1].setText("Encode Mode");
         menuButtons[1].setBackground(affermativeBackground);
@@ -75,7 +71,7 @@ public class Main {
         	encodeModeScreen(window, windowGraphics);
         }); 
         
-        menuButtons[2].setText("About");
+        menuButtons[2].setText("About Morse Code");
         menuButtons[2].setBackground(aboutBackground);
         menuButtons[2].addActionListener(e -> {
         	aboutScreen(window, windowGraphics);
@@ -87,7 +83,7 @@ public class Main {
         menuButtons[3].setBackground(negativeBackground);
         menuButtons[3].addActionListener(e -> {window.dispose();System.exit(0);}); // makes the program exit when you click button exit
 
-        window.add(windowGraphics);
+        
 	}
 	
 	public static void aboutScreen(JFrame window, WindowGraphics windowGraphics) {
@@ -181,6 +177,11 @@ public class Main {
 	    windowGraphics.repaint();
 	    windowGraphics.revalidate();
 	    
+	    MorseDecoder morseDecoder = new MorseDecoder();
+	    String[] character = new String[1];
+	    while((character[0] = morseDecoder.getRandomKey()).equals(" "));
+	    
+	    
 	    JButton backButton = new JButton("← Back");
 	    backButton.setBounds(20, 20, 100, 30);
 	    backButton.setBackground(Main.negativeBackground);
@@ -190,25 +191,26 @@ public class Main {
 	    backButton.addActionListener(e -> {
 	        menuScreen(window, windowGraphics);
 	    });
+	    
 	    windowGraphics.add(backButton);
-
+	    
 	    JLabel title = new JLabel("Encode");
 	    title.setFont(new Font("Arial", Font.BOLD, 30));
 	    FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
 	    title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
 	    title.setForeground(Main.foreground);
+	    
 	    windowGraphics.add(title);
 	    
 	    JTextField input = new JTextField();
-	    input.setBounds(window.getWidth()/2-20,window.getHeight()-315,80,30);
+	    input.setBounds(window.getWidth()/2-125,window.getHeight()/2+100,150,50);
 	    input.setBorder(null);
-	    input.setFont(new Font("Arial", Font.BOLD, 20));
+	    input.setFont(new Font("Arial", Font.BOLD, 40));
 	    input.setHighlighter(null);
 	    input.setHorizontalAlignment(JTextField.CENTER);
 	    input.setBackground(Main.background.brighter().brighter());
 	    input.setCaretColor(Main.foreground);
 	    input.setForeground(Main.foreground);
-	    
 	    input.addKeyListener(new KeyAdapter() {
 	    	@Override
 	        public void keyTyped(KeyEvent e) {
@@ -218,24 +220,40 @@ public class Main {
 	            if (e.getKeyChar() != '.' && e.getKeyChar() != '-') {
 	                e.consume(); 
 	            }
-	            
 	        }
 	    });
 	    
+	    windowGraphics.add(input);
 	    
+	    JLabel codeViewer = new JLabel(character[0]);
+	    codeViewer.setFont(new Font("Arial", Font.BOLD, 80));
+	    FontMetrics codeViewerMetrics = codeViewer.getFontMetrics(codeViewer.getFont());
+	    codeViewer.setBounds(window.getWidth() / 2 - codeViewerMetrics.stringWidth(codeViewer.getText()) / 2, window.getHeight()/2-100, codeViewerMetrics.stringWidth(title.getText()), 100);
+	    codeViewer.setForeground(Main.foreground);
+	    
+	    windowGraphics.add(codeViewer);
 	    
 	    JButton submitButton = new JButton("Submit");
-	    submitButton.setBounds(window.getWidth()/2+65,window.getHeight()-315,100,30);
+	    submitButton.setBounds(window.getWidth()/2-125+input.getWidth(),window.getHeight()/2+100,100,50);
 	    submitButton.setBackground(Main.affermativeBackground);
 	    submitButton.setForeground(Main.foreground);
+	    submitButton.setFont(new Font("Arial", Font.BOLD, 18));
 	    submitButton.setFocusable(false);
 	    submitButton.setBorder(BorderFactory.createEmptyBorder());
 	    submitButton.addActionListener(e -> {
-
+	    	if(morseDecoder.encodeText(character[0]).equals(input.getText())) {
+	    		while((character[0] = morseDecoder.getRandomKey()).equals(" "));
+	    		codeViewer.setText(character[0]);
+	    		input.setText("");
+	    	}
 	    });
+	    
 	    windowGraphics.add(submitButton);
 	    
-	    windowGraphics.add(input);
+	   
+
+	    windowGraphics.repaint();
+	    windowGraphics.revalidate();
 	}
 	
 
@@ -250,21 +268,18 @@ public class Main {
         windowGraphics.setBounds(0,0,window.getWidth(),window.getHeight());
 		windowGraphics.setBackground(background);
 		windowGraphics.setLayout(null);
+		window.add(windowGraphics);
 	}
 	
 	public static void main(String[] args) {
         JFrame window = new JFrame("Morse Trainer 1.0");
+        
         WindowGraphics windowGraphics = new WindowGraphics();
         
         windowInitialization(window,windowGraphics);
         
-        menuScreen(window,windowGraphics);
-        
+        encodeModeScreen(window,windowGraphics);
         
         window.setVisible(true);
-        
-        
-        
-                
     }
 }
