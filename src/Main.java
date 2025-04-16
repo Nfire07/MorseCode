@@ -19,14 +19,13 @@ public class Main {
 	public static final Color background = Color.decode("#212020").brighter();
 	
 	
-	
 	public static void menuScreen(JFrame window, WindowGraphics windowGraphics) {
 		windowGraphics.removeAll();
 		window.repaint();
         window.revalidate();
         
         JLabel title = new JLabel(titleString);
-        title.setFont(new Font("Arial",Font.BOLD,50));
+        title.setFont(new Font("Consolas",Font.BOLD,50));
         FontMetrics fontMetrics = title.getFontMetrics(title.getFont());
         
 		title.setBounds(window.getWidth()/2-fontMetrics.stringWidth(titleString)/2,
@@ -50,7 +49,7 @@ public class Main {
         		menuButtons[i]=new JButton();
         		menuButtons[i].setBounds(window.getWidth()/2-100,250+padding,200,50);
         		menuButtons[i].setForeground(foreground);
-        		menuButtons[i].setFont(new Font("Arial",Font.BOLD,18));
+        		menuButtons[i].setFont(new Font("Consolas",Font.BOLD,18));
         		menuButtons[i].setFocusable(false);
         		menuButtons[i].setBorder(BorderFactory.createEmptyBorder());
 	        	
@@ -62,7 +61,7 @@ public class Main {
         menuButtons[0].setText("Decode Mode");
         menuButtons[0].setBackground(affermativeBackground);
         menuButtons[0].addActionListener(e -> {
-        	
+        	decodeModeScreen(window,windowGraphics);
         });
         
         menuButtons[1].setText("Encode Mode");
@@ -83,9 +82,98 @@ public class Main {
         menuButtons[3].setBackground(negativeBackground);
         menuButtons[3].addActionListener(e -> {window.dispose();System.exit(0);}); // makes the program exit when you click button exit
 
+        addCreditLabel(window,windowGraphics);
         
 	}
 	
+	public static void decodeModeScreen(JFrame window, WindowGraphics windowGraphics) {
+		windowGraphics.removeAll();
+	    windowGraphics.repaint();
+	    windowGraphics.revalidate();
+	    
+	    MorseDecoder morseDecoder = new MorseDecoder();
+	    String[] character = new String[1];
+	    while((character[0] = morseDecoder.getRandomValue()).equals(" "));
+	    
+	    
+	    JButton backButton = new JButton("← Back");
+	    backButton.setBounds(20, 20, 100, 30);
+	    backButton.setBackground(Main.negativeBackground);
+	    backButton.setForeground(Main.foreground);
+	    backButton.setFocusable(false);
+	    backButton.setBorder(BorderFactory.createEmptyBorder());
+	    backButton.addActionListener(e -> {
+	        menuScreen(window, windowGraphics);
+	    });
+	    
+	    windowGraphics.add(backButton);
+	    
+	    JLabel title = new JLabel("Decode");
+	    title.setFont(new Font("Consolas", Font.BOLD, 30));
+	    FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
+	    title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
+	    title.setForeground(Main.foreground);
+	    
+	    windowGraphics.add(title);
+	    
+	    JTextField input = new JTextField();
+	    input.setBounds(window.getWidth()/2-125,window.getHeight()/2+100,150,50);
+	    input.setBorder(null);
+	    input.setFont(new Font("Consolas", Font.BOLD, 40));
+	    input.setHighlighter(null);
+	    input.setHorizontalAlignment(JTextField.CENTER);
+	    input.setBackground(Main.background.brighter().brighter());
+	    input.setCaretColor(Main.foreground);
+	    input.setForeground(Main.foreground);
+	    input.addKeyListener(new KeyAdapter() {
+	    	@Override
+	        public void keyTyped(KeyEvent e) {
+	            if (input.getText().length() >= 5) {
+	                e.consume();
+	            }
+	            if (!(e.getKeyChar()+"").toUpperCase().matches("^[A-Z]$")) {
+	                e.consume(); 
+	            }
+	        }
+	    });
+	    
+	    windowGraphics.add(input);
+	    
+	    JLabel codeViewer = new JLabel(character[0]);
+	    codeViewer.setFont(new Font("Consolas", Font.BOLD, 80));
+	    FontMetrics codeViewerMetrics = codeViewer.getFontMetrics(codeViewer.getFont());
+	    codeViewer.setBounds(window.getWidth() / 2 - codeViewerMetrics.stringWidth(codeViewer.getText()) / 2, window.getHeight()/2-100, codeViewerMetrics.stringWidth(title.getText()), 100);
+	    codeViewer.setForeground(Main.foreground);
+	    
+	    windowGraphics.add(codeViewer);
+	    
+	    JButton submitButton = new JButton("Submit");
+	    submitButton.setBounds(window.getWidth()/2-125+input.getWidth(),window.getHeight()/2+100,100,50);
+	    submitButton.setBackground(Main.affermativeBackground);
+	    submitButton.setForeground(Main.foreground);
+	    submitButton.setFont(new Font("Consolas", Font.BOLD, 18));
+	    submitButton.setFocusable(false);
+	    submitButton.setBorder(BorderFactory.createEmptyBorder());
+	    submitButton.addActionListener(e -> {
+	    	if(morseDecoder.decodeMorse(character[0]).equals(input.getText().toUpperCase())) {
+	    		while((character[0] = morseDecoder.getRandomValue()).equals(" "));
+	    		codeViewer.setText(character[0]);
+	    		input.setText("");
+	    	}
+	    	else {
+	    		input.setText("");
+	    	}
+	    });
+	    
+	    windowGraphics.add(submitButton);
+	    
+	    addCreditLabel(window,windowGraphics);
+
+	    windowGraphics.repaint();
+	    windowGraphics.revalidate();
+		
+	}
+
 	public static void aboutScreen(JFrame window, WindowGraphics windowGraphics) {
 	    windowGraphics.removeAll();
 	    windowGraphics.repaint();
@@ -94,7 +182,7 @@ public class Main {
 	    windowGraphics.setLayout(null);
 
 	    JLabel title = new JLabel("About Morse Code");
-	    title.setFont(new Font("Arial", Font.BOLD, 30));
+	    title.setFont(new Font("Consolas", Font.BOLD, 30));
 	    FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
 	    title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
 	    title.setForeground(Main.foreground);
@@ -109,10 +197,10 @@ public class Main {
 	    table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 	    table.setFillsViewportHeight(true);
 	    table.setEnabled(false);
-	    table.setFont(new Font("Courier New", Font.PLAIN, 18));
+	    table.setFont(new Font("Consolas", Font.BOLD, 18));
 	    table.setForeground(Color.WHITE);
 	    table.setBackground(Main.background);
-	    table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 30));
+	    table.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 30));
 	    table.getTableHeader().setForeground(Main.foreground);
 	    table.getTableHeader().setBackground(Main.background.darker());
 	    table.setGridColor(Main.foreground.darker().darker().darker());
@@ -168,6 +256,8 @@ public class Main {
 	    });
 	    windowGraphics.add(backButton);
 
+	    addCreditLabel(window,windowGraphics);
+	    
 	    window.repaint();
 	    window.revalidate();
 	}
@@ -195,7 +285,7 @@ public class Main {
 	    windowGraphics.add(backButton);
 	    
 	    JLabel title = new JLabel("Encode");
-	    title.setFont(new Font("Arial", Font.BOLD, 30));
+	    title.setFont(new Font("Consolas", Font.BOLD, 30));
 	    FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
 	    title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
 	    title.setForeground(Main.foreground);
@@ -205,7 +295,7 @@ public class Main {
 	    JTextField input = new JTextField();
 	    input.setBounds(window.getWidth()/2-125,window.getHeight()/2+100,150,50);
 	    input.setBorder(null);
-	    input.setFont(new Font("Arial", Font.BOLD, 40));
+	    input.setFont(new Font("Consolas", Font.BOLD, 40));
 	    input.setHighlighter(null);
 	    input.setHorizontalAlignment(JTextField.CENTER);
 	    input.setBackground(Main.background.brighter().brighter());
@@ -226,7 +316,7 @@ public class Main {
 	    windowGraphics.add(input);
 	    
 	    JLabel codeViewer = new JLabel(character[0]);
-	    codeViewer.setFont(new Font("Arial", Font.BOLD, 80));
+	    codeViewer.setFont(new Font("Consolas", Font.BOLD, 80));
 	    FontMetrics codeViewerMetrics = codeViewer.getFontMetrics(codeViewer.getFont());
 	    codeViewer.setBounds(window.getWidth() / 2 - codeViewerMetrics.stringWidth(codeViewer.getText()) / 2, window.getHeight()/2-100, codeViewerMetrics.stringWidth(title.getText()), 100);
 	    codeViewer.setForeground(Main.foreground);
@@ -237,7 +327,7 @@ public class Main {
 	    submitButton.setBounds(window.getWidth()/2-125+input.getWidth(),window.getHeight()/2+100,100,50);
 	    submitButton.setBackground(Main.affermativeBackground);
 	    submitButton.setForeground(Main.foreground);
-	    submitButton.setFont(new Font("Arial", Font.BOLD, 18));
+	    submitButton.setFont(new Font("Consolas", Font.BOLD, 18));
 	    submitButton.setFocusable(false);
 	    submitButton.setBorder(BorderFactory.createEmptyBorder());
 	    submitButton.addActionListener(e -> {
@@ -246,11 +336,14 @@ public class Main {
 	    		codeViewer.setText(character[0]);
 	    		input.setText("");
 	    	}
+	    	else {
+	    		input.setText("");
+	    	}
 	    });
 	    
 	    windowGraphics.add(submitButton);
 	    
-	   
+	    addCreditLabel(window,windowGraphics);
 
 	    windowGraphics.repaint();
 	    windowGraphics.revalidate();
@@ -271,6 +364,18 @@ public class Main {
 		window.add(windowGraphics);
 	}
 	
+	public static void addCreditLabel(JFrame window,WindowGraphics windowGraphics) {
+		String credit = "--Made by Nfire07--";
+		JLabel creditLabel = new JLabel(credit);
+		creditLabel.setBackground(background);
+		creditLabel.setForeground(foreground);
+		creditLabel.setHorizontalAlignment(JLabel.CENTER);
+		creditLabel.setFont(new Font("Consolas",Font.BOLD,18));
+		FontMetrics creditMetrics = creditLabel.getFontMetrics(creditLabel.getFont());
+		creditLabel.setBounds(window.getHeight()-creditMetrics.stringWidth(credit)-20,window.getWidth()-50,creditMetrics.stringWidth(credit),50);
+		windowGraphics.add(creditLabel);
+	}
+	
 	public static void main(String[] args) {
         JFrame window = new JFrame("Morse Trainer 1.0");
         
@@ -278,7 +383,7 @@ public class Main {
         
         windowInitialization(window,windowGraphics);
         
-        encodeModeScreen(window,windowGraphics);
+        menuScreen(window,windowGraphics);
         
         window.setVisible(true);
     }
