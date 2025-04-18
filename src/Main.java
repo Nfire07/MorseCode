@@ -9,7 +9,7 @@ public class Main {
 	 it has 2 modalities
 	 	-it show a morse value and require you the correct value
 	 	-it show you a letter and require you to code it
-	 */	
+	*/	
 	public static final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
 	public static final String titleString = "Morse Trainer 1.0";
 	public static final Color foreground = Color.decode("#e6e1e1").brighter();
@@ -86,6 +86,7 @@ public class Main {
         
 	}
 	
+        @SuppressWarnings("empty-statement")
 	public static void decodeModeScreen(JFrame window, WindowGraphics windowGraphics) {
 		windowGraphics.removeAll();
 	    windowGraphics.repaint();
@@ -128,10 +129,10 @@ public class Main {
 	    input.addKeyListener(new KeyAdapter() {
 	    	@Override
 	        public void keyTyped(KeyEvent e) {
-	            if (input.getText().length() >= 5) {
+	            if (input.getText().length() >= 1) {
 	                e.consume();
 	            }
-	            if (!(e.getKeyChar()+"").toUpperCase().matches("^[A-Z]$")) {
+	            if (!(e.getKeyChar()+"").toUpperCase().matches("^[A-Z]$") && !(e.getKeyChar()+"").toUpperCase().matches("^[0-9]$")) {
 	                e.consume(); 
 	            }
 	        }
@@ -175,93 +176,102 @@ public class Main {
 	}
 
 	public static void aboutScreen(JFrame window, WindowGraphics windowGraphics) {
-	    windowGraphics.removeAll();
-	    windowGraphics.repaint();
-	    windowGraphics.revalidate();
-
-	    windowGraphics.setLayout(null);
-
-	    JLabel title = new JLabel("About Morse Code");
-	    title.setFont(new Font("Consolas", Font.BOLD, 30));
-	    FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
-	    title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
-	    title.setForeground(Main.foreground);
-	    windowGraphics.add(title);
-
-	    JTable table = new JTable();
-	    String[] columnNames = {"Letter", "Morse"};
-
-	    MorseDecoder morseDecoder = new MorseDecoder();
-	    table.setModel(new DefaultTableModel(morseDecoder.getKeyValueFromMap(), columnNames));
-	    table.setRowHeight(30);
-	    table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-	    table.setFillsViewportHeight(true);
-	    table.setEnabled(false);
-	    table.setFont(new Font("Consolas", Font.BOLD, 18));
-	    table.setForeground(Color.WHITE);
-	    table.setBackground(Main.background);
-	    table.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 30));
-	    table.getTableHeader().setForeground(Main.foreground);
-	    table.getTableHeader().setBackground(Main.background.darker());
-	    table.setGridColor(Main.foreground.darker().darker().darker());
-	    table.getTableHeader().setReorderingAllowed(false);
-
-	    DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-	    centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-	    for (int i = 0; i < table.getColumnCount(); i++) {
-	        table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
-	    }
-
-	    JScrollPane scrollPane = new JScrollPane(table);
-	    scrollPane.setBounds(window.getWidth() / 2 - (window.getWidth() - 200) / 2, 100, window.getWidth() - 200, window.getHeight() - 150);
-	    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-	    scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
-	    scrollPane.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
-	        @Override
-	        protected JButton createIncreaseButton(int orientation) {
-	            JButton button = new JButton();
-	            button.setPreferredSize(new Dimension(0, 0));
-	            button.setVisible(false);
-	            return button;
-	        }
-
-	        @Override
-	        protected JButton createDecreaseButton(int orientation) {
-	            JButton button = new JButton();
-	            button.setPreferredSize(new Dimension(0, 0));
-	            button.setVisible(false);
-	            return button;
-	        }
-
-	        @Override
-	        protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {}
-
-	        @Override
-	        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {}
-	    });
-
-	    windowGraphics.add(scrollPane);
-
-	    JButton backButton = new JButton("← Back");
-	    backButton.setBounds(20, 20, 100, 30);
-	    backButton.setBackground(Main.negativeBackground);
-	    backButton.setForeground(Main.foreground);
-	    backButton.setFocusable(false);
-	    backButton.setBorder(BorderFactory.createEmptyBorder());
-	    backButton.addActionListener(e -> {
-	        windowGraphics.removeAll();
-	        menuScreen(window, windowGraphics);
-	        window.repaint();
-	        window.revalidate();
-	    });
-	    windowGraphics.add(backButton);
-
-	    addCreditLabel(window,windowGraphics);
-	    
-	    window.repaint();
-	    window.revalidate();
+		windowGraphics.removeAll();
+		windowGraphics.repaint();
+		windowGraphics.revalidate();
+	
+		windowGraphics.setLayout(null);
+	
+		JLabel title = new JLabel("About Morse Code");
+		title.setFont(new Font("Consolas", Font.BOLD, 30));
+		FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
+		title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
+		title.setForeground(Main.foreground);
+		windowGraphics.add(title);
+	
+		String[] columnNames = {"Letter", "Morse"};
+		MorseDecoder morseDecoder = new MorseDecoder();
+		JTable table = new JTable(new DefaultTableModel(morseDecoder.getKeyValueFromMap(), columnNames));
+	
+		table.setRowHeight(30);
+		table.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		table.setFillsViewportHeight(true);
+		table.setEnabled(false);
+		table.setFont(new Font("Consolas", Font.BOLD, 20));
+		table.setForeground(Color.WHITE);
+		table.setBackground(Main.background);
+		table.getTableHeader().setFont(new Font("Consolas", Font.BOLD, 30));
+		table.getTableHeader().setForeground(Main.foreground);
+		table.getTableHeader().setBackground(Main.background.darker());
+		table.setGridColor(Main.foreground.darker().darker().darker());
+		table.getTableHeader().setReorderingAllowed(false);
+	
+		DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+		centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+		for (int i = 0; i < table.getColumnCount(); i++) {
+			table.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+		}
+	
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.getVerticalScrollBar().setPreferredSize(new Dimension(0, 0));
+		scrollPane.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI() {
+			@Override
+			protected JButton createIncreaseButton(int orientation) {
+				JButton button = new JButton();
+				button.setPreferredSize(new Dimension(0, 0));
+				button.setVisible(false);
+				return button;
+			}
+	
+			@Override
+			protected JButton createDecreaseButton(int orientation) {
+				JButton button = new JButton();
+				button.setPreferredSize(new Dimension(0, 0));
+				button.setVisible(false);
+				return button;
+			}
+	
+			@Override
+			protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {}
+	
+			@Override
+			protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {}
+		});
+	
+		int tableX = 20;
+		int tableY = 100;
+		int tableWidth = window.getWidth() - 40; 
+		int tableHeight = window.getHeight() - 150;
+	
+		scrollPane.setBounds(tableX, tableY, tableWidth, tableHeight);
+	
+		windowGraphics.add(scrollPane);
+	
+		JButton backButton = new JButton("← Back");
+		backButton.setBounds(20, 20, 100, 30);
+		backButton.setBackground(Main.negativeBackground);
+		backButton.setForeground(Main.foreground);
+		backButton.setFocusable(false);
+		backButton.setBorder(BorderFactory.createEmptyBorder());
+		backButton.addActionListener(e -> {
+			windowGraphics.removeAll();
+			menuScreen(window, windowGraphics);
+			window.repaint();
+			window.revalidate();
+		});
+		windowGraphics.add(backButton);
+	
+		addCreditLabel(window, windowGraphics);
+	
+		window.repaint();
+		window.revalidate();
 	}
+	
+	
+	
 
+    @SuppressWarnings("empty-statement")
 	public static void encodeModeScreen(JFrame window,WindowGraphics windowGraphics) {
 		windowGraphics.removeAll();
 	    windowGraphics.repaint();
@@ -269,8 +279,8 @@ public class Main {
 	    
 	    MorseDecoder morseDecoder = new MorseDecoder();
 	    String[] character = new String[1];
+
 	    while((character[0] = morseDecoder.getRandomKey()).equals(" "));
-	    
 	    
 	    JButton backButton = new JButton("← Back");
 	    backButton.setBounds(20, 20, 100, 30);
