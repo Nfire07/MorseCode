@@ -43,7 +43,7 @@ public class MorseDecoder {
          alphaToMorse.put("7", "--...");
          alphaToMorse.put("8", "---..");
          alphaToMorse.put("9", "----.");
-         alphaToMorse.put(" ", " ");
+         //alphaToMorse.put(" ", " ");
 
     }
 
@@ -87,7 +87,7 @@ public class MorseDecoder {
         return encodedMessage.toString().trim();
     }
 
-    public String[][] getKeyValueFromMap() {
+    public String[][] getKeyValuesFromMap() {
         String[][] keyValue = new String[alphaToMorse.size()][2];
         int i = 0;
 
@@ -96,18 +96,15 @@ public class MorseDecoder {
             keyValue[i][1] = entry.getValue();
             i++;
         }
-
+        
         return keyValue;
     }
     
     public String getRandomKey() {
-    	return new ArrayList<String>(alphaToMorse.keySet()).get(new Random().nextInt(alphaToMorse.size())); 
+    	return new ArrayList<>(alphaToMorse.keySet()).get(new Random().nextInt(alphaToMorse.size())); 
     }
     
     public String getRandomValue() {
-    	return new ArrayList<String>(alphaToMorse.values()).get(new Random().nextInt(alphaToMorse.size())); 
+    	return new ArrayList<>(alphaToMorse.values()).get(new Random().nextInt(alphaToMorse.size())); 
     }
-
-    
-    
 }
