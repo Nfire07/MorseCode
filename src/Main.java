@@ -34,7 +34,7 @@ public class Main {
 	public static final Color GREEN_BACKGROUND = Color.decode("#235c32");
 	public static final Color YELLOW_BACKGROUND = Color.decode("#5c5323");
 	public static final Color RED_BACKGROUND = Color.decode("#691f1f");
-	public static final Color BACKGROUND = Color.decode("#212020").brighter();
+	public static final Color BACKGROUND = Color.decode("#212020").darker();
 	
 	
 	public static void menuScreen(JFrame window, WindowGraphics windowGraphics) {
@@ -103,95 +103,6 @@ public class Main {
 
         addCreditLabel(window,windowGraphics);
         
-	}
-	
-        @SuppressWarnings("empty-statement")
-	public static void decodeModeScreen(JFrame window, WindowGraphics windowGraphics) {
-		windowGraphics.removeAll();
-	    windowGraphics.repaint();
-	    windowGraphics.revalidate();
-	    
-	    MorseDecoder morseDecoder = new MorseDecoder();
-	    String[] character = new String[1];
-	    while((character[0] = morseDecoder.getRandomValue()).equals(" "));
-	    
-	    
-	    JButton backButton = new JButton("← Back");
-	    backButton.setBounds(20, 20, 100, 30);
-	    backButton.setBackground(Main.RED_BACKGROUND);
-	    backButton.setForeground(Main.FOREGROUND_COLOR);
-	    backButton.setFocusable(false);
-	    backButton.setBorder(BorderFactory.createEmptyBorder());
-	    backButton.addActionListener(e -> {
-	        menuScreen(window, windowGraphics);
-	    });
-	    
-	    windowGraphics.add(backButton);
-	    
-	    JLabel title = new JLabel("Decode");
-	    title.setFont(new Font("Consolas", Font.BOLD, 30));
-	    FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
-	    title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
-	    title.setForeground(Main.FOREGROUND_COLOR);
-	    
-	    windowGraphics.add(title);
-	    
-	    JTextField input = new JTextField();
-	    input.setBounds(window.getWidth()/2-125,window.getHeight()/2+100,150,50);
-	    input.setBorder(null);
-	    input.setFont(new Font("Consolas", Font.BOLD, 40));
-	    input.setHighlighter(null);
-	    input.setHorizontalAlignment(JTextField.CENTER);
-	    input.setBackground(Main.BACKGROUND.brighter().brighter());
-	    input.setCaretColor(Main.FOREGROUND_COLOR);
-	    input.setForeground(Main.FOREGROUND_COLOR);
-	    input.addKeyListener(new KeyAdapter() {
-	    	@Override
-	        public void keyTyped(KeyEvent e) {
-	            if (input.getText().length() >= 1) {
-	                e.consume();
-	            }
-	            if (!(e.getKeyChar()+"").toUpperCase().matches("^[A-Z]$") && !(e.getKeyChar()+"").toUpperCase().matches("^[0-9]$")) {
-	                e.consume(); 
-	            }
-	        }
-	    });
-	    
-	    windowGraphics.add(input);
-	    
-	    JLabel codeViewer = new JLabel(character[0]);
-	    codeViewer.setFont(new Font("Consolas", Font.BOLD, 80));
-	    FontMetrics codeViewerMetrics = codeViewer.getFontMetrics(codeViewer.getFont());
-	    codeViewer.setBounds(window.getWidth() / 2 - codeViewerMetrics.stringWidth(codeViewer.getText()) / 2, window.getHeight()/2-100, codeViewerMetrics.stringWidth(title.getText()), 100);
-	    codeViewer.setForeground(Main.FOREGROUND_COLOR);
-	    
-	    windowGraphics.add(codeViewer);
-	    
-	    JButton submitButton = new JButton("Submit");
-	    submitButton.setBounds(window.getWidth()/2-125+input.getWidth(),window.getHeight()/2+100,100,50);
-	    submitButton.setBackground(Main.GREEN_BACKGROUND);
-	    submitButton.setForeground(Main.FOREGROUND_COLOR);
-	    submitButton.setFont(new Font("Consolas", Font.BOLD, 18));
-	    submitButton.setFocusable(false);
-	    submitButton.setBorder(BorderFactory.createEmptyBorder());
-	    submitButton.addActionListener(e -> {
-	    	if(morseDecoder.decodeMorse(character[0]).equals(input.getText().toUpperCase())) {
-	    		while((character[0] = morseDecoder.getRandomValue()).equals(" "));
-	    		codeViewer.setText(character[0]);
-	    		input.setText("");
-	    	}
-	    	else {
-	    		input.setText("");
-	    	}
-	    });
-	    
-	    windowGraphics.add(submitButton);
-	    
-	    addCreditLabel(window,windowGraphics);
-
-	    windowGraphics.repaint();
-	    windowGraphics.revalidate();
-		
 	}
 
 	public static void aboutScreen(JFrame window, WindowGraphics windowGraphics) {
@@ -287,9 +198,104 @@ public class Main {
 		window.revalidate();
 	}
 	
-	
-	
+    @SuppressWarnings("empty-statement")
+	public static void decodeModeScreen(JFrame window, WindowGraphics windowGraphics) {
+		windowGraphics.removeAll();
+	    windowGraphics.repaint();
+	    windowGraphics.revalidate();
+	    
+	    MorseDecoder morseDecoder = new MorseDecoder();
+	    String[] character = new String[1];
+	    while((character[0] = morseDecoder.getRandomValue()).equals(" "));
+	    
+	    
+	    JButton backButton = new JButton("← Back");
+	    backButton.setBounds(20, 20, 100, 30);
+	    backButton.setBackground(Main.RED_BACKGROUND);
+	    backButton.setForeground(Main.FOREGROUND_COLOR);
+	    backButton.setFocusable(false);
+	    backButton.setBorder(BorderFactory.createEmptyBorder());
+	    backButton.addActionListener(e -> {
+	        menuScreen(window, windowGraphics);
+	    });
+	    
+	    windowGraphics.add(backButton);
+	    
+	    JLabel title = new JLabel("Decode");
+	    title.setFont(new Font("Consolas", Font.BOLD, 30));
+	    FontMetrics titleMetrics = title.getFontMetrics(title.getFont());
+	    title.setBounds(window.getWidth() / 2 - titleMetrics.stringWidth(title.getText()) / 2, 30, titleMetrics.stringWidth(title.getText()), 40);
+	    title.setForeground(Main.FOREGROUND_COLOR);
+	    
+	    windowGraphics.add(title);
+	    
+	    JLabel codeViewer = new JLabel(character[0]);
+	    codeViewer.setFont(new Font("Consolas", Font.BOLD, 80));
+	    FontMetrics codeViewerMetrics = codeViewer.getFontMetrics(codeViewer.getFont());
+	    codeViewer.setBounds(window.getWidth() / 2 - codeViewerMetrics.stringWidth(codeViewer.getText()) / 2, window.getHeight()/2-100, codeViewerMetrics.stringWidth(title.getText()), 100);
+	    codeViewer.setForeground(Main.FOREGROUND_COLOR);
+	    
+	    windowGraphics.add(codeViewer);
+	    
+	    JTextField input = new JTextField();
+	    input.setBounds(window.getWidth()/2-125,window.getHeight()/2+100,150,50);
+	    input.setBorder(null);
+	    input.setFont(new Font("Consolas", Font.BOLD, 40));
+	    input.setHighlighter(null);
+	    input.setHorizontalAlignment(JTextField.CENTER);
+	    input.setBackground(Main.BACKGROUND.brighter().brighter());
+	    input.setCaretColor(Main.FOREGROUND_COLOR);
+	    input.setForeground(Main.FOREGROUND_COLOR);
+	    input.addKeyListener(new KeyAdapter() {
+	    	@Override
+	        public void keyTyped(KeyEvent e) {
+	            if (input.getText().length() >= 1) {
+	                e.consume();
+	            }
+	            if (!(e.getKeyChar()+"").toUpperCase().matches("^[A-Z]$") && !(e.getKeyChar()+"").toUpperCase().matches("^[0-9]$")) {
+	                e.consume(); 
+	            }
+	            if(e.getKeyChar()=='\n') {
+	            	submitDecodeButtonFunction(morseDecoder, input, character, codeViewer);
+	            }
+	        }
+	    });
+	    
+	    windowGraphics.add(input);
+	    
+	    
+	    
+	    JButton submitButton = new JButton("Submit");
+	    submitButton.setBounds(window.getWidth()/2-125+input.getWidth(),window.getHeight()/2+100,100,50);
+	    submitButton.setBackground(Main.GREEN_BACKGROUND);
+	    submitButton.setForeground(Main.FOREGROUND_COLOR);
+	    submitButton.setFont(new Font("Consolas", Font.BOLD, 18));
+	    submitButton.setFocusable(false);
+	    submitButton.setBorder(BorderFactory.createEmptyBorder());
+	    submitButton.addActionListener(e -> {
+	    	submitDecodeButtonFunction(morseDecoder,input,character,codeViewer);
+	    });
+	    
+	    windowGraphics.add(submitButton);
+	    
+	    addCreditLabel(window,windowGraphics);
 
+	    windowGraphics.repaint();
+	    windowGraphics.revalidate();
+		
+	}
+    
+    public static void submitDecodeButtonFunction(MorseDecoder morseDecoder,JTextField input,String[] character,JLabel codeViewer) {
+    	if(morseDecoder.decodeMorse(character[0]).equals(input.getText().toUpperCase())) {
+    		while((character[0] = morseDecoder.getRandomValue()).equals(" "));
+    		codeViewer.setText(character[0]);
+    		input.setText("");
+    	}
+    	else {
+    		input.setText("");
+    	}
+    }
+	
     @SuppressWarnings("empty-statement")
 	public static void encodeModeScreen(JFrame window,WindowGraphics windowGraphics) {
 		windowGraphics.removeAll();
@@ -321,6 +327,14 @@ public class Main {
 	    
 	    windowGraphics.add(title);
 	    
+	    JLabel codeViewer = new JLabel(character[0]);
+	    codeViewer.setFont(new Font("Consolas", Font.BOLD, 80));
+	    FontMetrics codeViewerMetrics = codeViewer.getFontMetrics(codeViewer.getFont());
+	    codeViewer.setBounds(window.getWidth() / 2 - codeViewerMetrics.stringWidth(codeViewer.getText()) / 2, window.getHeight()/2-100, codeViewerMetrics.stringWidth(title.getText()), 100);
+	    codeViewer.setForeground(Main.FOREGROUND_COLOR);
+	    
+	    windowGraphics.add(codeViewer);
+	    
 	    JTextField input = new JTextField();
 	    input.setBounds(window.getWidth()/2-125,window.getHeight()/2+100,150,50);
 	    input.setBorder(null);
@@ -339,18 +353,13 @@ public class Main {
 	            if (e.getKeyChar() != '.' && e.getKeyChar() != '-') {
 	                e.consume(); 
 	            }
+	            if(e.getKeyChar() == '\n') {
+	            	submitEncodeButtonFunction(morseDecoder,input,character,codeViewer);
+	            }
 	        }
 	    });
 	    
 	    windowGraphics.add(input);
-	    
-	    JLabel codeViewer = new JLabel(character[0]);
-	    codeViewer.setFont(new Font("Consolas", Font.BOLD, 80));
-	    FontMetrics codeViewerMetrics = codeViewer.getFontMetrics(codeViewer.getFont());
-	    codeViewer.setBounds(window.getWidth() / 2 - codeViewerMetrics.stringWidth(codeViewer.getText()) / 2, window.getHeight()/2-100, codeViewerMetrics.stringWidth(title.getText()), 100);
-	    codeViewer.setForeground(Main.FOREGROUND_COLOR);
-	    
-	    windowGraphics.add(codeViewer);
 	    
 	    JButton submitButton = new JButton("Submit");
 	    submitButton.setBounds(window.getWidth()/2-125+input.getWidth(),window.getHeight()/2+100,100,50);
@@ -360,14 +369,7 @@ public class Main {
 	    submitButton.setFocusable(false);
 	    submitButton.setBorder(BorderFactory.createEmptyBorder());
 	    submitButton.addActionListener(e -> {
-	    	if(morseDecoder.encodeText(character[0]).equals(input.getText())) {
-	    		while((character[0] = morseDecoder.getRandomKey()).equals(" "));
-	    		codeViewer.setText(character[0]);
-	    		input.setText("");
-	    	}
-	    	else {
-	    		input.setText("");
-	    	}
+	    	submitEncodeButtonFunction(morseDecoder,input,character,codeViewer);
 	    });
 	    
 	    windowGraphics.add(submitButton);
@@ -377,6 +379,17 @@ public class Main {
 	    windowGraphics.repaint();
 	    windowGraphics.revalidate();
 	}
+    
+    public static void submitEncodeButtonFunction(MorseDecoder morseDecoder,JTextField input,String[] character,JLabel codeViewer) {
+    	if(morseDecoder.encodeText(character[0]).equals(input.getText())) {
+    		while((character[0] = morseDecoder.getRandomKey()).equals(" "));
+    		codeViewer.setText(character[0]);
+    		input.setText("");
+    	}
+    	else {
+    		input.setText("");
+    	}
+    }
 	
 
 	
